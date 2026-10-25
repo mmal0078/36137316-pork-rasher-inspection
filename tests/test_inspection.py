@@ -86,3 +86,19 @@ def test_inspect_output_contract(tmp_path):
     assert r["defect_present"] is False and r["detections"] == []
     with pytest.raises(ValueError):
         inspect_image(p, None, threshold=1.5, model=FakeModel([], []))
+
+
+def test_draw_report_marks_boxes_and_verdict(tmp_path):
+    from porkinspect.inspection import draw_report
+
+    p = belt(tmp_path)
+    rep = {"defect_present": True, "detections": [
+        {"class": "unsealed", "confidence": 0.9, "box_xywhn": [0.5, 0.6, 0.2, 0.2]}]}
+    out = draw_report(p, rep, truth=[("unsealed", (0.5, 0.6, 0.25, 0.25))], threshold=0.16)
+    a = np.asarray(out)
+    assert out.size == (720, 540)
+    assert tuple(a[5, 360]) == (200, 30, 30)  # red DEFECT banner
+    x0 = int((0.5 - 0.1) * 720)
+    assert tuple(a[int(0.6 * 540), x0 + 1]) == (213, 94, 0)  # unsealed box outline colour
+    ok = draw_report(p, {"defect_present": False, "detections": []})
+    assert tuple(np.asarray(ok)[5, 360]) == (30, 140, 60)  # green banner

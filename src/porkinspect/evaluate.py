@@ -80,10 +80,14 @@ def match_image(
     dets: list[Detection],
     gts: tuple[Box, ...],
     conf_thr: float,
+    *,
     iou_thr: float = 0.5,
     class_aware: bool = True,
 ) -> tuple[list[bool], list[bool]]:
     """Greedily match detections above ``conf_thr`` to ground-truth boxes.
+
+    ``iou_thr`` and ``class_aware`` are keyword-only: passing ``True`` positionally
+    would otherwise be read silently as an IoU threshold of 1.
 
     Returns:
         ``(gt_found, det_correct)``: one flag per ground-truth box (was it
@@ -184,7 +188,7 @@ def box_recall_by_class(
         found = np.zeros(n_classes, int)
         total = np.zeros(n_classes, int)
         for im, g in gts.items():
-            hit, _ = match_image(preds.get(im, []), g, conf_thr, iou_thr, class_aware=aware)
+            hit, _ = match_image(preds.get(im, []), g, conf_thr, iou_thr=iou_thr, class_aware=aware)
             for b, h in zip(g, hit):
                 total[b.cls] += 1
                 found[b.cls] += int(h)

@@ -37,6 +37,13 @@ def test_match_respects_class_threshold_and_one_to_one():
     assert match_image(wrong, gts, 0.5, class_aware=False)[0] == [True]
 
 
+def test_match_options_are_keyword_only():
+    gts = (Box(1, 0.5, 0.5, 0.2, 0.2),)
+    dets = [Detection(1, 0.9, (0.5, 0.5, 0.2, 0.2))]
+    with pytest.raises(TypeError):
+        match_image(dets, gts, 0.5, True)  # would otherwise mean iou_thr=1
+
+
 def test_frame_counts_and_rates():
     flags = np.array([True, True, False, True, False])
     defect = np.array([True, True, True, False, False])
