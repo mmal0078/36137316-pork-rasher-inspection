@@ -1,0 +1,92 @@
+{
+  "train_minutes": 24.73,
+  "val": {
+    "precision": 0.7340094131748092,
+    "recall": 0.6442278689677081,
+    "mAP50": 0.660916262403097,
+    "mAP50_95": 0.42227660281815516,
+    "per_class": {
+      "loose-meat": {
+        "precision": 1.0,
+        "recall": 0.5137306479841224,
+        "mAP50": 0.665,
+        "mAP50_95": 0.4655
+      },
+      "packaging-error": {
+        "precision": 0.3634135995747762,
+        "recall": 0.47058823529411764,
+        "mAP50": 0.3596828419053014,
+        "mAP50_95": 0.12552252892693957
+      },
+      "twisted-meat": {
+        "precision": 0.7409396260657626,
+        "recall": 0.6666666666666666,
+        "mAP50": 0.665,
+        "mAP50_95": 0.4325
+      },
+      "unsealed": {
+        "precision": 0.831684427058698,
+        "recall": 0.9259259259259259,
+        "mAP50": 0.9539822077070864,
+        "mAP50_95": 0.6655838823456807
+      }
+    },
+    "speed_ms_per_image": {
+      "preprocess": 1.053,
+      "inference": 3.878,
+      "loss": 0.001,
+      "postprocess": 5.117
+    }
+  },
+  "test": {
+    "precision": 0.8913351829693814,
+    "recall": 0.33163017836577025,
+    "mAP50": 0.3590098494304523,
+    "mAP50_95": 0.19552566879383965,
+    "per_class": {
+      "loose-meat": {
+        "precision": 1.0,
+        "recall": 0.0,
+        "mAP50": 0.022333333333333337,
+        "mAP50_95": 0.011166666666666668
+      },
+      "packaging-error": {
+        "precision": 0.7267620139967244,
+        "recall": 0.4782608695652174,
+        "mAP50": 0.526610410735424,
+        "mAP50_95": 0.18404837432085724
+      },
+      "twisted-meat": {
+        "precision": 1.0,
+        "recall": 0.0,
+        "mAP50": 0.011136363636363635,
+        "mAP50_95": 0.0011136363636363635
+      },
+      "unsealed": {
+        "precision": 0.8385787178808011,
+        "recall": 0.8482598438978636,
+        "mAP50": 0.8759592900166882,
+        "mAP50_95": 0.5857739978241984
+      }
+    },
+    "speed_ms_per_image": {
+      "preprocess": 0.856,
+      "inference": 1.95,
+      "loss": 0.001,
+      "postprocess": 6.242
+    }
+  },
+  "model": {
+    "parameters": 3138732,
+    "GFLOPs_at_imgsz": 2.188,
+    "GFLOPs_at_640": 8.753
+  },
+  "predict_timing_val": {
+    "images": 120,
+    "wall_ms_per_image": 10.19
+  },
+  "predict_timing_test": {
+    "images": 80,
+    "wall_ms_per_image": 6.64
+  }
+}
