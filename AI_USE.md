@@ -100,4 +100,16 @@ The brief requires disclosure of all material AI use. This file is a running log
 - **Mislabelled GPU time:** AI had been quoting "about 5 ms per image on the T4" without saying this came from batch-16 validation. One frame at a time it is 10-15 ms end to end. The README and profiling output now label both.
 - **Licence:** AI had not mentioned that Ultralytics and the fine-tuned weights are AGPL-3.0, not MIT, until the final audit.
 
+## Try-the-model notebook (03)
+
+**What AI did**
+- Wrote `draw_report` (with a test), chose 8 example test images and wrote notebook 03.
+- Ran the notebook end to end before handing it over.
+
+**AI errors caught**
+- **Misleading example labels.** AI first labelled examples "caught" when only the frame was flagged. Running the notebook showed that the twisted-meat and packaging-error examples were flagged as the wrong defect type. The examples were re-picked (4 genuine successes, 4 labelled failures), and the outcomes are now computed by box matching rather than written by hand.
+- **Wrong arguments in AI's example script.** `match_image(dets, gts, T, True)` passed `True` as the IoU threshold (meaning IoU = 1) instead of switching on class matching, which garbled the first computed outcomes.
+  - The fix makes `iou_thr` and `class_aware` keyword-only, with a test.
+  - Earlier results were unaffected: every other caller passed the IoU threshold correctly.
+
 *(To complete: my own reflection on how AI use affected my understanding and workflow.)*

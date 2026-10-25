@@ -2,6 +2,8 @@
 
 MMA3001 (Numerical Methods and Machine Learning) individual project.
 
+**Try the model in your browser:** [Open in Colab](https://colab.research.google.com/github/mmal0078/36137316-pork-rasher-inspection/blob/main/notebooks/03_try_the_model.ipynb). Click **Runtime → Run all**; there is nothing to install and no GPU needed. It runs the trained detector on 8 example test images (4 successes, 4 failures) and on any image you upload. A [pre-run copy](notebooks/executed/03_try_the_model_executed.ipynb) shows the outputs without running anything.
+
 **Docs site:** https://mmal0078.github.io/36137316-pork-rasher-inspection/ (API reference and test report)
 
 A computer-vision pipeline that looks at a camera frame of a packaged pork-rasher tray on a conveyor and finds packaging and product-placement defects. The aim is to support automated quality inspection, so that faulty trays can be pulled before distribution without relying on manual inspection.
@@ -233,9 +235,10 @@ src/porkinspect/    package code
   inspection.py     run the detector on one image, with input validation
 scripts/            prepare_data, train_yolo, analyse_run, baseline, compare, compare_runs, brightness_test,
                     profile_pipeline, inspect_image, build_docs
-notebooks/          Colab notebooks: 01 training, 02 sensitivity runs
+notebooks/          Colab notebooks: 01 training, 02 sensitivity runs, 03 try the model
   executed/         the notebooks as actually run, with their outputs
 models/             final trained detector (AGPL-3.0, see models/README.md)
+examples/           8 test images (CC BY 4.0) with labels and outcomes, used by notebook 03
 tests/              pytest tests
 results/            small result files (JSON, figures) that are committed
 data/               raw and processed data (ignored by git)
@@ -247,7 +250,7 @@ AI_USE.md           log of AI assistance
 
 - **Code:** MIT (see `LICENSE`).
 - **Trained weights** (`models/`): AGPL-3.0, because they are derived from Ultralytics YOLOv8.
-- **Dataset:** CC BY 4.0, © its Roboflow Universe author. It is not redistributed here.
+- **Dataset:** CC BY 4.0, © its Roboflow Universe author. Only the 8 example images in `examples/` are redistributed, with attribution.
 - **Ultralytics** (used as a dependency) is AGPL-3.0.
 
 ## AI use

@@ -1,0 +1,9 @@
+file,source_image,labelled_defects,labelled_boxes_xywhn,outcome_on_test_set
+01_unsealed.jpg,frame_with_red_1427_jpg.rf.adb68bb9baac518a460e12f99d1eea7a.jpg,unsealed,"unsealed:0.8618,0.8407,0.2764,0.3185",frame flagged; unsealed found (correct type)
+02_packaging_error.jpg,frame_with_red_21_jpg.rf.898d2cd3db0cf96ae2985d594121f268.jpg,packaging-error,"packaging-error:0.9444,0.6870,0.1111,0.2148",frame flagged; packaging-error found (correct type)
+03_loose_meat.jpg,frame_with_red_1695_jpg.rf.0fcc67310f01b5c3361403020eaa6afa.jpg,loose-meat,"loose-meat:0.1784,0.6845,0.1330,0.1014",frame flagged; loose-meat found (correct type)
+04_no_defect.jpg,frame_with_red_258_jpg.rf.1c18d8fd20e681b1fcaba54e790497ba.jpg,none,,"frame not flagged; correctly passed: no defect labelled, none detected"
+05_twisted_meat_wrong_type.jpg,frame_with_red_3371_jpg.rf.55a1977413f15016b60c76339853127c.jpg,twisted-meat,"twisted-meat:0.0389,0.8213,0.0778,0.1537",frame flagged; twisted-meat found but called another type; 1 extra detection(s) not matching a label
+06_two_defects_one_found.jpg,frame_with_red_6253_jpg.rf.97b0c50d4f0b4fec5ca62db6445421bc.jpg,packaging-error;unsealed,"packaging-error:0.7850,0.7514,0.1424,0.1241;unsealed:0.9514,0.8083,0.0972,0.0907",frame flagged; packaging-error found (correct type); unsealed MISSED; 1 extra detection(s) not matching a label
+07_twisted_meat_missed.jpg,frame_with_red_437_jpg.rf.1d88cff92b7d5f81c694265df9667631.jpg,twisted-meat,"twisted-meat:0.0354,0.8519,0.0708,0.2963",frame not flagged; twisted-meat MISSED
+08_false_alarm.jpg,frame_with_red_7471_jpg.rf.d9733c9a3c8e75ec75d4c6c9f744a199.jpg,none,,"frame flagged; FALSE ALARM: no labelled defect, but the film looks wrinkled (possibly a missing label)"
