@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Project data (not committed: large, and licensed separately)
+data/raw/
+data/processed/
+*.zip
