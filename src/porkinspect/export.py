@@ -9,7 +9,7 @@ Output layout (``out``)::
     train/images, train/labels
     valid/images, valid/labels
     test/images,  test/labels
-    data.yaml     Ultralytics dataset file (relative paths, so the folder can be moved)
+    data.yaml     Ultralytics dataset file (absolute ``path``; re-export if the folder moves)
 """
 
 from __future__ import annotations
@@ -36,9 +36,15 @@ def remap_boxes(boxes: tuple[Box, ...], keep: list[int]) -> list[Box]:
 
 
 def write_data_yaml(path: Path, names: list[str]) -> None:
-    """Write an Ultralytics ``data.yaml`` with paths relative to its folder."""
+    """Write an Ultralytics ``data.yaml``.
+
+    ``path`` is written as an absolute path because Ultralytics resolves a
+    relative ``path`` against the current working directory, not the YAML
+    file's folder. Re-run :func:`export_dataset` (or edit ``path``) if the
+    folder is moved.
+    """
     path.write_text(
-        "path: .\n"
+        f"path: {path.parent.resolve()}\n"
         "train: train/images\n"
         "val: valid/images\n"
         "test: test/images\n"

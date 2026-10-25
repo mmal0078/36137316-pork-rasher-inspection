@@ -66,6 +66,18 @@ pytest
 
 `data/processed/data.yaml` can be passed straight to Ultralytics YOLO.
 
+### Training (GPU)
+
+Open [`notebooks/01_train_yolo.ipynb`](notebooks/01_train_yolo.ipynb) in Google Colab: [Open in Colab](https://colab.research.google.com/github/mmal0078/36137316-pork-rasher-inspection/blob/main/notebooks/01_train_yolo.ipynb). It clones this repo, prepares the data, then runs:
+
+```bash
+pip install ultralytics
+python scripts/train_yolo.py --data data/processed/data.yaml --model yolov8n.pt \
+    --epochs 60 --imgsz 640 --batch 16 --device 0 --out runs --name yolov8n_640
+```
+
+Outputs go to `runs/<name>/`: best weights, the training log, `metrics.json` (validation and test mAP, model size, GFLOPs, timings), and every prediction at confidence ≥ 0.001 on the validation and test images (`predictions_*.json`). Thresholds can then be analysed without re-running the model.
+
 ## Repository layout
 
 ```
@@ -73,7 +85,8 @@ src/porkinspect/    package code
   labels.py         read and validate YOLO label files, parse Roboflow file names
   index.py          group files into distinct images; leakage and label-conflict checks
   export.py         write the dataset with dropped classes removed
-scripts/            command-line entry points
+scripts/            command-line entry points (prepare_data.py, train_yolo.py)
+notebooks/          Colab notebooks (01_train_yolo.ipynb)
 tests/              pytest tests
 results/            small result files (JSON, figures) that are committed
 data/               raw and processed data (ignored by git)
