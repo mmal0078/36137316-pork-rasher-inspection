@@ -112,4 +112,6 @@ The brief requires disclosure of all material AI use. This file is a running log
   - The fix makes `iou_thr` and `class_aware` keyword-only, with a test.
   - Earlier results were unaffected: every other caller passed the IoU threshold correctly.
 
-*(To complete: my own reflection on how AI use affected my understanding and workflow.)*
+## My reflection
+
+The code was written primarily by Claude, and Claude drafted the README and the report, which I read through, edited and shortened. The analysis was roughly even: Claude often presented options as if it had already made up its mind, and I challenged it, asking it to weigh them objectively and whether they were relevant to the engineering problem. Many of these challenges changed the outcome, such as keeping the official split and choosing the 640 px model. Most of Claude's errors came from assumptions: it would start looking at the data and then extrapolate instead of confirming, so I questioned every response and file it sent me. I understood the theory of CNNs from the unit, but only once I made Claude slow down and explain not just what it was doing but why did I connect the dots and see that theory in a real engineering setting. The full reflection is in Section 7 of the report.
