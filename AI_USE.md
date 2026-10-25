@@ -43,4 +43,19 @@ The brief requires disclosure of all material AI use. This file is a running log
 - The generated `data.yaml` used a relative `path: .`. Ultralytics resolves that from the working directory, so the images weren't found. The unit test had passed because it only checked the file's text. The fix writes an absolute path, and a test now checks for it.
 - `model.info()` returns nothing in Ultralytics 8.4, so the parameter and FLOPs count crashed. The fix computes them directly. The result, 8.75 GFLOPs at 640 px, matches the published YOLOv8n figure (8.7).
 
+**Another claim corrected by looking at the data**
+- AI first described `packaging-error` as "torn, misplaced or folded film", guessing from the class name.
+- Zoomed crops of 12 random boxes per class showed it actually marks small creases or pinches in the lid film, almost always where a rasher presses against the film near the tray edge.
+- `unsealed` marks a large area of loose, wrinkled film. `twisted-meat` marks a rasher on its edge or flipped. `loose-meat` marks a rasher out of line or a stray piece.
+
+## Session 1 (continued): baseline and comparison
+
+**What AI did**
+- Wrote `features.py` (20 colour/shape features, HOG), `baseline.py` (tree, SVM and MLP grid) and `compare.py`, with tests.
+
+**Errors caught along the way**
+- **The hue feature was wrong.** Red sits where the hue scale wraps from 1 back to 0, so the plain mean came out at a meaningless 0.705. Fixed by shifting the hue half a turn; a test now checks it.
+- **The first model-selection metric was misleading.** Average precision was used first, but 88% of frames contain a defect, so random scores already get about 0.88 AP. Switched to ROC AUC, where random is 0.5, and reran.
+- **No cherry-picking.** On test, the colour/shape SVM scored higher (AUC 0.87) than the configuration chosen on validation (HOG SVM, test AUC 0.74). The validation choice is reported anyway, because choosing by test score would bias the comparison.
+
 *(To complete: my own reflection on how AI use affected my understanding and workflow.)*
