@@ -2,6 +2,8 @@
 
 MMA3001 (Numerical Methods and Machine Learning) individual project.
 
+**Docs site:** https://mmal0078.github.io/36137316-pork-rasher-inspection/ (API reference and test report)
+
 A computer-vision pipeline that looks at a camera frame of a packaged pork-rasher tray on a conveyor and finds packaging and product-placement defects. The aim is to support automated quality inspection, so that faulty trays can be pulled before distribution without relying on manual inspection.
 
 > **Status: v0.4.** Done: data audit, YOLOv8n training, evaluation, baseline comparison, brightness robustness, image-size and model-size sensitivity, input validation, docs and tests. Final model: YOLOv8n at 640 px.
@@ -22,7 +24,7 @@ The threshold is chosen on validation (the highest one that still catches at lea
   - unsealed 0.84;
   - packaging-error 0.53;
   - loose-meat 0.67 and twisted-meat 0.06, each from only 3–4 test boxes.
-- **Model size and speed:** 3.1 M parameters, 8.75 GFLOPs, about 5 ms inference per image on a T4 GPU (10–15 ms end to end).
+- **Model size and speed:** 3.1 M parameters, 8.75 GFLOPs per image. On a T4 GPU, inference takes 4.7 ms per image in batches of 16, and 10–15 ms end to end one frame at a time. On one CPU thread it takes 86 ms.
 - **Brightness:** with test images scaled from 0.4× to 2× and the threshold fixed, mAP50 stayed between 0.49 and 0.52, and 62–63 of the 68 defect frames were still caught.
 - **Line speed:** at up to 200 packs/min (3.3 packs/s), the GPU model has time for about 20–30 frames per pack, and one CPU thread for about 3.
 
@@ -32,7 +34,7 @@ Details are in `results/yolov8n_640/`, `results/baseline/` and `results/comparis
 
 All four runs used identical settings (60 epochs, batch 16, seed 0, T4 GPU). Each threshold was chosen on validation (recall ≥ 95%).
 
-| Run | GFLOPs | T4 inference | Val frame AUC | Test frame AUC [95% CI] | Defect frames caught | False alarms |
+| Run | GFLOPs | T4 inference (batch 16) | Val frame AUC | Test frame AUC [95% CI] | Defect frames caught | False alarms |
 |---|---|---|---|---|---|---|
 | YOLOv8n, 320 px | 2.2 | 1.9 ms | 0.89 | 0.91 [0.77–0.99] | 61/68 | 1/12 |
 | YOLOv8n, 480 px | 4.9 | 2.8 ms | 0.90 | 0.91 [0.78–0.99] | 58/68 | 2/12 |
@@ -49,6 +51,29 @@ All four runs used identical settings (60 epochs, batch 16, seed 0, T4 GPU). Eac
 - **A missed defect is the costly error,** while a false alarm costs one recheck. The 640 px model gives small packaging creases the most resolution, and it caught the most defect frames.
 - **The difference from 320 px is not significant.** 640 px caught 3 frames that 320 px missed, and 320 px caught none that 640 px missed (McNemar p = 0.25). Validation alone slightly favoured the smaller inputs.
 - **A plant with limited hardware could use 320 px** at a quarter of the compute.
+
+### Profiling and arithmetic intensity (`results/profiling/`, `scripts/profile_pipeline.py`)
+
+**Where the time goes.** Profiled with cProfile on one CPU thread, one frame at a time, with files already in memory:
+
+| Stage | Share of pipeline time |
+|---|---|
+| Network forward pass | 89% (about 82 ms) |
+| Our input checks (`check_image`) | 4% (about 3 ms) |
+| Ultralytics preprocessing | 4% |
+| Post-processing (non-maximum suppression) | 1% |
+
+Only the network is worth optimising, and reducing the input size is the effective lever (see the 320 px run). The first read of each file from disk added about 65 ms per image in this sandbox. A line camera delivers frames in memory, so this is excluded.
+
+**Arithmetic intensity** of one 640 px forward pass:
+- **Work:** 8.75 GFLOPs.
+- **Memory traffic (lower-bound model):** 12.6 MB of weights, a 4.9 MB input, and 184 MB of layer outputs, each written once and read once, all as float32. That is 385 MB in total.
+- **AI ≈ 22.7 FLOP/byte.** This is just below the T4's ridge point of 8.1 TFLOPS ÷ 320 GB/s ≈ 25 FLOP/byte, so the model sits near the memory-bound/compute-bound boundary on the T4.
+- **Most traffic is activations, not weights.** This is typical of a small CNN on a large image.
+
+**Achieved throughput:**
+- T4 at batch 16: 8.75 GFLOP ÷ 4.7 ms ≈ 1.86 TFLOP/s, about 23% of FP32 peak. The roofline allows about 7.3 TFLOP/s, so small layers and launch overheads keep the GPU underused.
+- One CPU thread: about 105 GFLOP/s.
 
 ## Problem, inputs and outputs
 
@@ -131,7 +156,14 @@ Python 3.10 or later.
 
 ```bash
 pip install -r requirements.txt
+pip install ultralytics   # needed for training, inspection and profiling
 ```
+
+**Versions used for the reported results:**
+- Training on Google Colab (Tesla T4, 15 GB): Ultralytics 8.4.188, PyTorch 2.11.0+cu130, Python 3.13.16.
+- Analysis on Linux (x86-64 CPU): Python 3.13.17, Ultralytics 8.4.188, PyTorch 2.14.1, NumPy 2.5.3, scikit-learn 1.9.1, scikit-image 0.26.0, Pillow 12.3.0, matplotlib 3.11.2, pytest 9.1.1, pdoc 16.0.0.
+
+The final trained model is included at `models/yolov8n_640_best.pt` (6.5 MB), so inspection and the analysis scripts run without retraining. See `models/README.md` for its licence.
 
 ## Usage
 
@@ -142,14 +174,14 @@ python scripts/prepare_data.py --raw data/raw --out data/processed
 # 2. Run the tests (and write the HTML test report)
 pytest --html=docs/test_report.html --self-contained-html
 
-# 3. Inspect images with a trained model (one JSON line per image)
-python scripts/inspect_image.py --weights runs/yolov8n_640/weights/best.pt path/to/frame.jpg
+# 3. Inspect images with the trained model (one JSON line per image)
+python scripts/inspect_image.py --weights models/yolov8n_640_best.pt path/to/frame.jpg
 
-# 4. Regenerate the HTML API documentation
-PYTHONPATH=src pdoc porkinspect -o docs --docformat google
+# 4. Rebuild the docs site (pdoc API reference + test report + landing page)
+python scripts/build_docs.py
 ```
 
-Documentation: [`docs/porkinspect.html`](docs/porkinspect.html) (API reference, generated by pdoc from the docstrings) and [`docs/test_report.html`](docs/test_report.html) (latest test run). Download the repo, or view the files with a service such as htmlpreview, because GitHub shows HTML as source code.
+Documentation is published at **https://mmal0078.github.io/36137316-pork-rasher-inspection/**: the API reference generated by pdoc from the docstrings, and the latest pytest report. GitHub Pages serves it from the `docs/` folder on `main`.
 
 `data/processed/data.yaml` can be passed straight to Ultralytics YOLO.
 
@@ -180,6 +212,9 @@ python scripts/compare.py --run runs/yolov8n_640 --data data/processed --baselin
 # Brightness robustness (threshold fixed at the validation-chosen value)
 python scripts/brightness_test.py --run runs/yolov8n_640 --data data/processed --threshold 0.16
 
+# Profile the per-frame pipeline and estimate arithmetic intensity
+python scripts/profile_pipeline.py --weights models/yolov8n_640_best.pt --data data/processed
+
 # Image-size / model-size comparison across runs
 python scripts/compare_runs.py --runs runs/yolov8n_640 runs/yolov8n_320 runs/yolov8n_480 runs/yolov8s_640 --data data/processed
 ```
@@ -196,18 +231,24 @@ src/porkinspect/    package code
   evaluate.py       IoU matching, frame-level metrics, threshold sweep, bootstrap intervals
   features.py       hand-crafted colour/shape and HOG features for the baseline
   inspection.py     run the detector on one image, with input validation
-scripts/            prepare_data, train_yolo, analyse_run, baseline, compare, compare_runs, brightness_test, inspect_image
+scripts/            prepare_data, train_yolo, analyse_run, baseline, compare, compare_runs, brightness_test,
+                    profile_pipeline, inspect_image, build_docs
 notebooks/          Colab notebooks: 01 training, 02 sensitivity runs
+  executed/         the notebooks as actually run, with their outputs
+models/             final trained detector (AGPL-3.0, see models/README.md)
 tests/              pytest tests
 results/            small result files (JSON, figures) that are committed
 data/               raw and processed data (ignored by git)
-docs/               HTML API documentation (pdoc)
+docs/               docs site: landing page, pdoc API reference, pytest report (GitHub Pages)
 AI_USE.md           log of AI assistance
 ```
 
 ## Licence
 
-Code: MIT (see `LICENSE`). Dataset: CC BY 4.0, © its Roboflow Universe author. It is not redistributed here.
+- **Code:** MIT (see `LICENSE`).
+- **Trained weights** (`models/`): AGPL-3.0, because they are derived from Ultralytics YOLOv8.
+- **Dataset:** CC BY 4.0, © its Roboflow Universe author. It is not redistributed here.
+- **Ultralytics** (used as a dependency) is AGPL-3.0.
 
 ## AI use
 
