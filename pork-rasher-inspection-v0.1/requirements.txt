@@ -1,8 +1,0 @@
-numpy>=1.24
-pillow>=10
-matplotlib>=3.7
-pytest>=8
-pytest-html>=4
-pdoc>=14
-# Training (run in Colab with a GPU):
-# ultralytics>=8.3
