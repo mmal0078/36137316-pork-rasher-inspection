@@ -40,7 +40,16 @@ SPLITS = {"train": "train", "val": "valid", "test": "test"}
 
 
 def extract(data: Path, cache: Path) -> dict:
-    """Features, labels and file names per split, cached as ``.npz``."""
+    """Compute features, labels and file names for every split, with caching.
+
+    Args:
+        data: Exported dataset folder (``train/``, ``valid/``, ``test/``).
+        cache: ``.npz`` file; read if it exists, otherwise written.
+
+    Returns:
+        Split name -> {"simple", "hog", "y", "names"} arrays, where ``y`` is
+        True for frames with at least one labelled defect.
+    """
     if cache.exists():
         z = np.load(cache, allow_pickle=True)
         return {s: {k: z[f"{s}_{k}"] for k in ("simple", "hog", "y", "names")} for s in SPLITS}
@@ -57,7 +66,18 @@ def extract(data: Path, cache: Path) -> dict:
 
 
 def feature_matrix(d: dict, which: str) -> np.ndarray:
-    """Select a feature set: 'simple', 'hog' or 'simple+hog'."""
+    """Select a feature set for one split.
+
+    Args:
+        d: One split's entry from :func:`extract`.
+        which: ``"simple"``, ``"hog"`` or ``"simple+hog"``.
+
+    Returns:
+        Feature matrix of shape (n_images, n_features).
+
+    Raises:
+        KeyError: If ``which`` is not one of the names above.
+    """
     if which == "simple+hog":
         return np.hstack([d["simple"], d["hog"]])
     return d[which]
@@ -86,7 +106,17 @@ def candidates():
 
 
 def build_svm(C, gamma, n_features):
-    """RBF SVM with standardised inputs; numeric gamma is divided by n_features."""
+    """Build an RBF SVM with standardised inputs.
+
+    Args:
+        C: Regularisation strength (larger = less regularisation).
+        gamma: ``"scale"`` or a number; a number is divided by ``n_features``
+            so that one grid works for feature sets of different sizes.
+        n_features: Number of input features.
+
+    Returns:
+        Unfitted scikit-learn pipeline (StandardScaler -> SVC, balanced class weights).
+    """
     from sklearn.pipeline import make_pipeline
     from sklearn.preprocessing import StandardScaler
     from sklearn.svm import SVC
@@ -96,21 +126,48 @@ def build_svm(C, gamma, n_features):
 
 
 def scores(model, X):
-    """Continuous defect score: decision function if available, else P(defect)."""
+    """Continuous defect score for each row of ``X``.
+
+    Args:
+        model: Fitted scikit-learn classifier.
+        X: Feature matrix.
+
+    Returns:
+        Decision-function values if the model has them, else P(defect).
+        Higher means more likely to contain a defect.
+    """
     if hasattr(model, "decision_function"):
         return model.decision_function(X)
     return model.predict_proba(X)[:, 1]
 
 
 def recall95_threshold(s: np.ndarray, y: np.ndarray) -> float:
-    """Highest threshold whose recall on (s, y) is >= 0.95."""
+    """Highest threshold whose recall on (s, y) is >= 0.95.
+
+    Args:
+        s: Defect scores, one per frame.
+        y: Boolean ground truth, True for defect frames.
+
+    Returns:
+        The threshold; frames with ``s >= threshold`` are flagged.
+    """
     pos = np.sort(s[y])
     k = int(np.floor(0.05 * len(pos)))  # may miss at most 5% of defect frames
     return float(pos[k])
 
 
 def evaluate(s: np.ndarray, y: np.ndarray, t: float) -> dict:
-    """Frame-level counts and bootstrap intervals at threshold ``t``."""
+    """Frame-level counts and bootstrap intervals at threshold ``t``.
+
+    Args:
+        s: Defect scores, one per frame.
+        y: Boolean ground truth, True for defect frames.
+        t: Threshold; frames with ``s >= t`` are flagged.
+
+    Returns:
+        Dict with the threshold, tp/fn/fp/tn, recall and false-alarm rate,
+        each rate with a 95% bootstrap interval.
+    """
     f = s >= t
     rec = lambda i: (f[i] & y[i]).sum() / y[i].sum() if y[i].sum() else np.nan  # noqa: E731
     far = lambda i: (f[i] & ~y[i]).sum() / (~y[i]).sum() if (~y[i]).sum() else np.nan  # noqa: E731

@@ -46,8 +46,16 @@ class Detection:
 def load_predictions(path: str | Path) -> dict[str, list[Detection]]:
     """Read a ``predictions_*.json`` file written by ``scripts/train_yolo.py``.
 
+    Args:
+        path: JSON file holding one record per image with keys ``image``, ``cls``,
+            ``conf`` and ``xywhn`` (normalised boxes).
+
     Returns:
         Image file name -> detections, sorted by descending confidence.
+
+    Raises:
+        FileNotFoundError: If ``path`` does not exist.
+        KeyError: If a record lacks one of the keys above.
     """
     out: dict[str, list[Detection]] = {}
     for r in json.loads(Path(path).read_text()):
@@ -57,7 +65,20 @@ def load_predictions(path: str | Path) -> dict[str, list[Detection]]:
 
 
 def load_ground_truth(label_dir: str | Path, images: list[str], n_classes: int) -> dict[str, tuple[Box, ...]]:
-    """Read the label file for each image name in ``images``."""
+    """Read the ground-truth label file for each image.
+
+    Args:
+        label_dir: Folder of YOLO ``.txt`` label files.
+        images: Image file names; each label file shares the image's stem.
+        n_classes: Number of valid class ids (see :func:`porkinspect.labels.parse_label_line`).
+
+    Returns:
+        Image file name -> its labelled boxes (empty tuple for a defect-free image).
+
+    Raises:
+        FileNotFoundError: If an image has no label file.
+        ValueError: If a label line is invalid.
+    """
     label_dir = Path(label_dir)
     return {im: read_label_file(label_dir / (Path(im).stem + ".txt"), n_classes) for im in images}
 
@@ -65,7 +86,12 @@ def load_ground_truth(label_dir: str | Path, images: list[str], n_classes: int) 
 def iou(a: tuple[float, float, float, float], b: tuple[float, float, float, float]) -> float:
     """Intersection over union of two boxes given as (x_centre, y_centre, w, h).
 
-    Returns a value in [0, 1]; 0 when the boxes do not overlap.
+    Args:
+        a: First box, normalised (x_centre, y_centre, w, h).
+        b: Second box, same format.
+
+    Returns:
+        A value in [0, 1]; 0 when the boxes do not overlap or both have zero area.
     """
     ax0, ay0, ax1, ay1 = a[0] - a[2] / 2, a[1] - a[3] / 2, a[0] + a[2] / 2, a[1] + a[3] / 2
     bx0, by0, bx1, by1 = b[0] - b[2] / 2, b[1] - b[3] / 2, b[0] + b[2] / 2, b[1] + b[3] / 2
@@ -88,6 +114,13 @@ def match_image(
 
     ``iou_thr`` and ``class_aware`` are keyword-only: passing ``True`` positionally
     would otherwise be read silently as an IoU threshold of 1.
+
+    Args:
+        dets: Detections for one image, sorted by descending confidence.
+        gts: Ground-truth boxes for the same image.
+        conf_thr: Detections below this confidence are ignored.
+        iou_thr: Minimum IoU for a match.
+        class_aware: If True, a detection can only match a box of the same class.
 
     Returns:
         ``(gt_found, det_correct)``: one flag per ground-truth box (was it
@@ -112,7 +145,14 @@ def match_image(
 
 @dataclass
 class FrameCounts:
-    """Frame-level confusion counts at one threshold."""
+    """Frame-level confusion counts at one threshold.
+
+    Attributes:
+        tp: Defect frames flagged.
+        fn: Defect frames missed.
+        fp: Defect-free frames flagged (false alarms).
+        tn: Defect-free frames passed.
+    """
 
     tp: int  # defect frames flagged
     fn: int  # defect frames missed
@@ -133,18 +173,37 @@ class FrameCounts:
 
     @property
     def precision(self) -> float:
-        """Share of flagged frames that really contain a defect."""
+        """Share of flagged frames that really contain a defect (NaN if none flagged)."""
         n = self.tp + self.fp
         return self.tp / n if n else float("nan")
 
 
 def frame_flags(preds: dict[str, list[Detection]], images: list[str], conf_thr: float) -> np.ndarray:
-    """Boolean array: is each image flagged (any detection >= ``conf_thr``)?"""
+    """Decide, for each image, whether the frame is flagged as defective.
+
+    Args:
+        preds: Image name -> detections, from :func:`load_predictions`.
+        images: Image names, in the order wanted for the output.
+        conf_thr: Confidence threshold in [0, 1].
+
+    Returns:
+        Boolean array, True where any detection has confidence >= ``conf_thr``.
+        An image missing from ``preds`` counts as having no detections.
+    """
     return np.array([any(d.conf >= conf_thr for d in preds.get(im, [])) for im in images])
 
 
 def frame_counts(flags: np.ndarray, is_defect: np.ndarray) -> FrameCounts:
-    """Confusion counts from per-frame flags and ground truth."""
+    """Count frame-level outcomes.
+
+    Args:
+        flags: Boolean array, True where the frame was flagged.
+        is_defect: Boolean array of the same length, True where the frame has
+            at least one labelled defect.
+
+    Returns:
+        :class:`FrameCounts` with true/false positives and negatives.
+    """
     return FrameCounts(
         tp=int((flags & is_defect).sum()),
         fn=int((~flags & is_defect).sum()),
@@ -156,7 +215,19 @@ def frame_counts(flags: np.ndarray, is_defect: np.ndarray) -> FrameCounts:
 def threshold_sweep(
     preds: dict[str, list[Detection]], gts: dict[str, tuple[Box, ...]], thresholds: np.ndarray
 ) -> list[dict]:
-    """Frame-level recall, false-alarm rate, precision and F1 at each threshold."""
+    """Frame-level metrics at each confidence threshold.
+
+    Args:
+        preds: Image name -> detections, from :func:`load_predictions`.
+        gts: Image name -> labelled boxes, from :func:`load_ground_truth`; its
+            keys define the evaluated images.
+        thresholds: Confidence thresholds to evaluate.
+
+    Returns:
+        One dict per threshold with ``threshold``, ``recall``, ``false_alarm_rate``,
+        ``precision``, ``f1`` and the counts ``tp``, ``fn``, ``fp``, ``tn``.
+        Undefined rates (no frames of that kind) are NaN.
+    """
     images = sorted(gts)
     is_defect = np.array([len(gts[im]) > 0 for im in images])
     rows = []
@@ -177,6 +248,13 @@ def box_recall_by_class(
     iou_thr: float = 0.5,
 ) -> dict[str, dict[int, tuple[int, int]]]:
     """Ground-truth boxes found / total, per class, class-aware and class-agnostic.
+
+    Args:
+        preds: Image name -> detections, from :func:`load_predictions`.
+        gts: Image name -> labelled boxes, from :func:`load_ground_truth`.
+        conf_thr: Detections below this confidence are ignored.
+        n_classes: Number of classes; every class gets an entry, even if absent.
+        iou_thr: Minimum IoU for a detection to count as finding a box.
 
     Returns:
         ``{"class_aware": {cls: (found, total)}, "any_class": {cls: (found, total)}}``.

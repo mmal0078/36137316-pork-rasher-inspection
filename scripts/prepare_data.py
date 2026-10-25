@@ -38,6 +38,11 @@ def brightness_check(images: list[SourceImage], out_png: Path, block: int = 250)
     only the belt. The median over a source image's copies is used, which
     cancels most of the random exposure augmentation.
 
+    Args:
+        images: Distinct source images from ``build_index``.
+        out_png: Where to save the brightness-over-time plot.
+        block: Number of consecutive frames per time block.
+
     Returns:
         Summary statistics: percentiles, block-mean range, share of variance
         explained by ``block``-frame time blocks, and lag-1 autocorrelation.

@@ -136,6 +136,12 @@ def source_stem(filename: str) -> str:
 def frame_number(filename: str) -> int:
     """Return the video frame number encoded at the end of the stem.
 
+    Args:
+        filename: Roboflow export file name.
+
+    Returns:
+        The frame number.
+
     Example:
         >>> frame_number("frame_with_red_10049_jpg.rf.cd786c4f.jpg")
         10049

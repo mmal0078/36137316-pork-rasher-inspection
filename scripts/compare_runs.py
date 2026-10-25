@@ -32,7 +32,15 @@ NAMES = ["loose-meat", "packaging-error", "twisted-meat", "unsealed"]
 
 
 def frame_scores(preds, images):
-    """Highest detection confidence per image (0 if none)."""
+    """Frame-level defect score from the detector.
+
+    Args:
+        preds: Image name -> detections.
+        images: Image names, in the wanted order.
+
+    Returns:
+        Highest detection confidence per image (0 if none).
+    """
     return np.array([max((d.conf for d in preds.get(i, [])), default=0.0) for i in images])
 
 
@@ -102,7 +110,16 @@ def main() -> None:
     from matplotlib.ticker import NullFormatter
 
     def wilson(k, n, z=1.96):
-        """95% Wilson score interval for a proportion k/n."""
+        """Wilson score interval for a proportion k/n.
+
+        Args:
+            k: Number of successes.
+            n: Number of trials (must be > 0).
+            z: Normal quantile; 1.96 gives 95%.
+
+        Returns:
+            ``(low, high)``.
+        """
         p_, d = k / n, 1 + z * z / n
         c = (p_ + z * z / (2 * n)) / d
         h = z * np.sqrt(p_ * (1 - p_) / n + z * z / (4 * n * n)) / d
