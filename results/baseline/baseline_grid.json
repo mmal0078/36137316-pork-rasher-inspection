@@ -1,0 +1,794 @@
+[
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=3, leaf=5",
+    "val_AP": 0.8958793490245629,
+    "val_AUC": 0.5384097035040432,
+    "fit_s": 0.04
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=3, leaf=20",
+    "val_AP": 0.8958793490245629,
+    "val_AUC": 0.5384097035040432,
+    "fit_s": 0.02
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=3, leaf=50",
+    "val_AP": 0.900570050892799,
+    "val_AUC": 0.5286388140161725,
+    "fit_s": 0.02
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=5, leaf=5",
+    "val_AP": 0.9083960162093565,
+    "val_AUC": 0.534366576819407,
+    "fit_s": 0.03
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=5, leaf=20",
+    "val_AP": 0.9112209210411695,
+    "val_AUC": 0.5633423180592992,
+    "fit_s": 0.03
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=5, leaf=50",
+    "val_AP": 0.9150155550600431,
+    "val_AUC": 0.5785040431266846,
+    "fit_s": 0.03
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=8, leaf=5",
+    "val_AP": 0.8991373242664853,
+    "val_AUC": 0.5464959568733153,
+    "fit_s": 0.04
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=8, leaf=20",
+    "val_AP": 0.9176619407541906,
+    "val_AUC": 0.6189353099730459,
+    "fit_s": 0.04
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=8, leaf=50",
+    "val_AP": 0.9181516692685692,
+    "val_AUC": 0.5892857142857143,
+    "fit_s": 0.03
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=12, leaf=5",
+    "val_AP": 0.8965632738480265,
+    "val_AUC": 0.5475067385444744,
+    "fit_s": 0.04
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=12, leaf=20",
+    "val_AP": 0.90560363935492,
+    "val_AUC": 0.5882749326145552,
+    "fit_s": 0.04
+  },
+  {
+    "features": "simple",
+    "model": "tree",
+    "params": "depth=12, leaf=50",
+    "val_AP": 0.9135153171643294,
+    "val_AUC": 0.5694070080862534,
+    "fit_s": 0.03
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=0.3, gamma=scale",
+    "val_AP": 0.942704513449846,
+    "val_AUC": 0.7176549865229112,
+    "fit_s": 0.55
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=0.3, gamma=0.3",
+    "val_AP": 0.9346379611281492,
+    "val_AUC": 0.6367924528301887,
+    "fit_s": 0.28
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=0.3, gamma=3",
+    "val_AP": 0.9248453227956789,
+    "val_AUC": 0.6462264150943396,
+    "fit_s": 0.27
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=1, gamma=scale",
+    "val_AP": 0.9398125226257933,
+    "val_AUC": 0.7196765498652291,
+    "fit_s": 0.26
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=1, gamma=0.3",
+    "val_AP": 0.9417248803452893,
+    "val_AUC": 0.6886792452830188,
+    "fit_s": 0.26
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=1, gamma=3",
+    "val_AP": 0.9173537942800722,
+    "val_AUC": 0.6118598382749326,
+    "fit_s": 0.28
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=3, gamma=scale",
+    "val_AP": 0.9357548644106958,
+    "val_AUC": 0.6805929919137466,
+    "fit_s": 0.27
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=3, gamma=0.3",
+    "val_AP": 0.9474380690387685,
+    "val_AUC": 0.7324797843665769,
+    "fit_s": 0.26
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=3, gamma=3",
+    "val_AP": 0.9190983246199165,
+    "val_AUC": 0.621967654986523,
+    "fit_s": 0.32
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=10, gamma=scale",
+    "val_AP": 0.9293926541537819,
+    "val_AUC": 0.6590296495956873,
+    "fit_s": 0.36
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=10, gamma=0.3",
+    "val_AP": 0.9467226351157537,
+    "val_AUC": 0.7392183288409704,
+    "fit_s": 0.3
+  },
+  {
+    "features": "simple",
+    "model": "svm",
+    "params": "C=10, gamma=3",
+    "val_AP": 0.9119095997348323,
+    "val_AUC": 0.6071428571428572,
+    "fit_s": 0.36
+  },
+  {
+    "features": "simple",
+    "model": "mlp",
+    "params": "hidden=(32,), alpha=0.0001",
+    "val_AP": 0.927740278211086,
+    "val_AUC": 0.6900269541778976,
+    "fit_s": 0.21
+  },
+  {
+    "features": "simple",
+    "model": "mlp",
+    "params": "hidden=(32,), alpha=0.01",
+    "val_AP": 0.9280251021110892,
+    "val_AUC": 0.6913746630727763,
+    "fit_s": 0.2
+  },
+  {
+    "features": "simple",
+    "model": "mlp",
+    "params": "hidden=(32,), alpha=1",
+    "val_AP": 0.9245954572274389,
+    "val_AUC": 0.679245283018868,
+    "fit_s": 0.17
+  },
+  {
+    "features": "simple",
+    "model": "mlp",
+    "params": "hidden=(128,), alpha=0.0001",
+    "val_AP": 0.8872808984583931,
+    "val_AUC": 0.5242587601078168,
+    "fit_s": 0.13
+  },
+  {
+    "features": "simple",
+    "model": "mlp",
+    "params": "hidden=(128,), alpha=0.01",
+    "val_AP": 0.8872808984583931,
+    "val_AUC": 0.5242587601078168,
+    "fit_s": 0.13
+  },
+  {
+    "features": "simple",
+    "model": "mlp",
+    "params": "hidden=(128,), alpha=1",
+    "val_AP": 0.8860476864110625,
+    "val_AUC": 0.5222371967654987,
+    "fit_s": 0.17
+  },
+  {
+    "features": "simple",
+    "model": "mlp",
+    "params": "hidden=(128, 32), alpha=0.0001",
+    "val_AP": 0.9381088763378098,
+    "val_AUC": 0.7142857142857143,
+    "fit_s": 0.41
+  },
+  {
+    "features": "simple",
+    "model": "mlp",
+    "params": "hidden=(128, 32), alpha=0.01",
+    "val_AP": 0.9344469013873965,
+    "val_AUC": 0.6866576819407009,
+    "fit_s": 0.63
+  },
+  {
+    "features": "simple",
+    "model": "mlp",
+    "params": "hidden=(128, 32), alpha=1",
+    "val_AP": 0.8671041936640004,
+    "val_AUC": 0.4339622641509434,
+    "fit_s": 0.16
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=3, leaf=5",
+    "val_AP": 0.9076689030193074,
+    "val_AUC": 0.6243261455525606,
+    "fit_s": 1.83
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=3, leaf=20",
+    "val_AP": 0.9076689030193074,
+    "val_AUC": 0.6243261455525606,
+    "fit_s": 1.87
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=3, leaf=50",
+    "val_AP": 0.9063015340262249,
+    "val_AUC": 0.6212938005390836,
+    "fit_s": 1.75
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=5, leaf=5",
+    "val_AP": 0.8998366214988799,
+    "val_AUC": 0.6132075471698114,
+    "fit_s": 2.84
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=5, leaf=20",
+    "val_AP": 0.90810486693665,
+    "val_AUC": 0.601078167115903,
+    "fit_s": 2.88
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=5, leaf=50",
+    "val_AP": 0.9146724906829318,
+    "val_AUC": 0.6674528301886793,
+    "fit_s": 2.77
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=8, leaf=5",
+    "val_AP": 0.9210499251682553,
+    "val_AUC": 0.6610512129380054,
+    "fit_s": 4.09
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=8, leaf=20",
+    "val_AP": 0.9111405359949669,
+    "val_AUC": 0.6017520215633423,
+    "fit_s": 3.82
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=8, leaf=50",
+    "val_AP": 0.9090629133858716,
+    "val_AUC": 0.6391509433962265,
+    "fit_s": 3.76
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=12, leaf=5",
+    "val_AP": 0.885529422989767,
+    "val_AUC": 0.51044474393531,
+    "fit_s": 4.69
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=12, leaf=20",
+    "val_AP": 0.8928009253557476,
+    "val_AUC": 0.5185309973045822,
+    "fit_s": 4.65
+  },
+  {
+    "features": "hog",
+    "model": "tree",
+    "params": "depth=12, leaf=50",
+    "val_AP": 0.9067164938952224,
+    "val_AUC": 0.623989218328841,
+    "fit_s": 3.81
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=0.3, gamma=scale",
+    "val_AP": 0.9475482429176012,
+    "val_AUC": 0.7122641509433963,
+    "fit_s": 7.91
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=0.3, gamma=0.3",
+    "val_AP": 0.9379553990975227,
+    "val_AUC": 0.690700808625337,
+    "fit_s": 7.59
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=0.3, gamma=3",
+    "val_AP": 0.9209036530515758,
+    "val_AUC": 0.6381401617250674,
+    "fit_s": 8.41
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=1, gamma=scale",
+    "val_AP": 0.9546327140832598,
+    "val_AUC": 0.7533692722371967,
+    "fit_s": 5.7
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=1, gamma=0.3",
+    "val_AP": 0.9613301070866542,
+    "val_AUC": 0.77088948787062,
+    "fit_s": 6.05
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=1, gamma=3",
+    "val_AP": 0.9389393226897511,
+    "val_AUC": 0.7001347708894878,
+    "fit_s": 8.46
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=3, gamma=scale",
+    "val_AP": 0.9469138241381221,
+    "val_AUC": 0.7331536388140162,
+    "fit_s": 6.79
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=3, gamma=0.3",
+    "val_AP": 0.9564274384542168,
+    "val_AUC": 0.7473045822102425,
+    "fit_s": 5.08
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=3, gamma=3",
+    "val_AP": 0.9389393226897511,
+    "val_AUC": 0.7001347708894878,
+    "fit_s": 8.58
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=10, gamma=scale",
+    "val_AP": 0.9463486552182023,
+    "val_AUC": 0.7297843665768194,
+    "fit_s": 6.94
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=10, gamma=0.3",
+    "val_AP": 0.9424776008434037,
+    "val_AUC": 0.7149595687331537,
+    "fit_s": 4.21
+  },
+  {
+    "features": "hog",
+    "model": "svm",
+    "params": "C=10, gamma=3",
+    "val_AP": 0.9389393226897511,
+    "val_AUC": 0.7001347708894878,
+    "fit_s": 8.41
+  },
+  {
+    "features": "hog",
+    "model": "mlp",
+    "params": "hidden=(32,), alpha=0.0001",
+    "val_AP": 0.9293064745150671,
+    "val_AUC": 0.6799191374663073,
+    "fit_s": 1.0
+  },
+  {
+    "features": "hog",
+    "model": "mlp",
+    "params": "hidden=(32,), alpha=0.01",
+    "val_AP": 0.9282258793035357,
+    "val_AUC": 0.6785714285714286,
+    "fit_s": 0.95
+  },
+  {
+    "features": "hog",
+    "model": "mlp",
+    "params": "hidden=(32,), alpha=1",
+    "val_AP": 0.9324741971258315,
+    "val_AUC": 0.7048517520215632,
+    "fit_s": 1.0
+  },
+  {
+    "features": "hog",
+    "model": "mlp",
+    "params": "hidden=(128,), alpha=0.0001",
+    "val_AP": 0.9435483428043828,
+    "val_AUC": 0.7159703504043128,
+    "fit_s": 3.17
+  },
+  {
+    "features": "hog",
+    "model": "mlp",
+    "params": "hidden=(128,), alpha=0.01",
+    "val_AP": 0.9437756629868469,
+    "val_AUC": 0.7142857142857143,
+    "fit_s": 2.65
+  },
+  {
+    "features": "hog",
+    "model": "mlp",
+    "params": "hidden=(128,), alpha=1",
+    "val_AP": 0.9473160063238982,
+    "val_AUC": 0.7196765498652291,
+    "fit_s": 1.95
+  },
+  {
+    "features": "hog",
+    "model": "mlp",
+    "params": "hidden=(128, 32), alpha=0.0001",
+    "val_AP": 0.9279992782420288,
+    "val_AUC": 0.7173180592991913,
+    "fit_s": 2.38
+  },
+  {
+    "features": "hog",
+    "model": "mlp",
+    "params": "hidden=(128, 32), alpha=0.01",
+    "val_AP": 0.9274078621592291,
+    "val_AUC": 0.7173180592991915,
+    "fit_s": 2.62
+  },
+  {
+    "features": "hog",
+    "model": "mlp",
+    "params": "hidden=(128, 32), alpha=1",
+    "val_AP": 0.9481367296104644,
+    "val_AUC": 0.7553908355795149,
+    "fit_s": 1.97
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=3, leaf=5",
+    "val_AP": 0.90564242177497,
+    "val_AUC": 0.616576819407008,
+    "fit_s": 1.92
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=3, leaf=20",
+    "val_AP": 0.9076689030193074,
+    "val_AUC": 0.6243261455525606,
+    "fit_s": 1.9
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=3, leaf=50",
+    "val_AP": 0.9049388732683279,
+    "val_AUC": 0.6182614555256065,
+    "fit_s": 1.86
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=5, leaf=5",
+    "val_AP": 0.8998366214988799,
+    "val_AUC": 0.6132075471698114,
+    "fit_s": 2.93
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=5, leaf=20",
+    "val_AP": 0.90810486693665,
+    "val_AUC": 0.601078167115903,
+    "fit_s": 2.82
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=5, leaf=50",
+    "val_AP": 0.9160776333209641,
+    "val_AUC": 0.6698113207547169,
+    "fit_s": 2.85
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=8, leaf=5",
+    "val_AP": 0.9208748878452746,
+    "val_AUC": 0.6597035040431267,
+    "fit_s": 4.12
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=8, leaf=20",
+    "val_AP": 0.9124933936636141,
+    "val_AUC": 0.6057951482479784,
+    "fit_s": 3.94
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=8, leaf=50",
+    "val_AP": 0.9114377765712235,
+    "val_AUC": 0.644878706199461,
+    "fit_s": 3.69
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=12, leaf=5",
+    "val_AP": 0.8846872350666284,
+    "val_AUC": 0.507412398921833,
+    "fit_s": 4.78
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=12, leaf=20",
+    "val_AP": 0.8874357347937663,
+    "val_AUC": 0.4976415094339623,
+    "fit_s": 4.61
+  },
+  {
+    "features": "simple+hog",
+    "model": "tree",
+    "params": "depth=12, leaf=50",
+    "val_AP": 0.9170866758196494,
+    "val_AUC": 0.6529649595687331,
+    "fit_s": 3.91
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=0.3, gamma=scale",
+    "val_AP": 0.9460431201688291,
+    "val_AUC": 0.7075471698113208,
+    "fit_s": 7.3
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=0.3, gamma=0.3",
+    "val_AP": 0.9391524527904802,
+    "val_AUC": 0.6967654986522911,
+    "fit_s": 7.94
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=0.3, gamma=3",
+    "val_AP": 0.9211139406495528,
+    "val_AUC": 0.639487870619946,
+    "fit_s": 8.6
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=1, gamma=scale",
+    "val_AP": 0.9564455604084178,
+    "val_AUC": 0.7580862533692723,
+    "fit_s": 5.9
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=1, gamma=0.3",
+    "val_AP": 0.9616019086405934,
+    "val_AUC": 0.7695417789757413,
+    "fit_s": 6.39
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=1, gamma=3",
+    "val_AP": 0.9386582434394585,
+    "val_AUC": 0.700134770889488,
+    "fit_s": 8.89
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=3, gamma=scale",
+    "val_AP": 0.9478733777952487,
+    "val_AUC": 0.7304582210242588,
+    "fit_s": 7.22
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=3, gamma=0.3",
+    "val_AP": 0.9584600831703233,
+    "val_AUC": 0.7520215633423181,
+    "fit_s": 5.04
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=3, gamma=3",
+    "val_AP": 0.9384563718927901,
+    "val_AUC": 0.6987870619946092,
+    "fit_s": 8.72
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=10, gamma=scale",
+    "val_AP": 0.9471131755619462,
+    "val_AUC": 0.727088948787062,
+    "fit_s": 7.47
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=10, gamma=0.3",
+    "val_AP": 0.9448264693708452,
+    "val_AUC": 0.7142857142857143,
+    "fit_s": 4.31
+  },
+  {
+    "features": "simple+hog",
+    "model": "svm",
+    "params": "C=10, gamma=3",
+    "val_AP": 0.9384563718927901,
+    "val_AUC": 0.6987870619946092,
+    "fit_s": 8.6
+  },
+  {
+    "features": "simple+hog",
+    "model": "mlp",
+    "params": "hidden=(32,), alpha=0.0001",
+    "val_AP": 0.9512689689109851,
+    "val_AUC": 0.7176549865229112,
+    "fit_s": 2.01
+  },
+  {
+    "features": "simple+hog",
+    "model": "mlp",
+    "params": "hidden=(32,), alpha=0.01",
+    "val_AP": 0.9511342798750978,
+    "val_AUC": 0.717654986522911,
+    "fit_s": 3.0
+  },
+  {
+    "features": "simple+hog",
+    "model": "mlp",
+    "params": "hidden=(32,), alpha=1",
+    "val_AP": 0.9519631591057833,
+    "val_AUC": 0.7493261455525605,
+    "fit_s": 3.09
+  },
+  {
+    "features": "simple+hog",
+    "model": "mlp",
+    "params": "hidden=(128,), alpha=0.0001",
+    "val_AP": 0.9388993086143982,
+    "val_AUC": 0.6785714285714286,
+    "fit_s": 3.26
+  },
+  {
+    "features": "simple+hog",
+    "model": "mlp",
+    "params": "hidden=(128,), alpha=0.01",
+    "val_AP": 0.9386002135635809,
+    "val_AUC": 0.6758760107816711,
+    "fit_s": 3.34
+  },
+  {
+    "features": "simple+hog",
+    "model": "mlp",
+    "params": "hidden=(128,), alpha=1",
+    "val_AP": 0.9442739579906881,
+    "val_AUC": 0.6994609164420486,
+    "fit_s": 4.39
+  },
+  {
+    "features": "simple+hog",
+    "model": "mlp",
+    "params": "hidden=(128, 32), alpha=0.0001",
+    "val_AP": 0.9433754206669562,
+    "val_AUC": 0.6893530997304582,
+    "fit_s": 4.76
+  },
+  {
+    "features": "simple+hog",
+    "model": "mlp",
+    "params": "hidden=(128, 32), alpha=0.01",
+    "val_AP": 0.9415330856325111,
+    "val_AUC": 0.6826145552560647,
+    "fit_s": 5.58
+  },
+  {
+    "features": "simple+hog",
+    "model": "mlp",
+    "params": "hidden=(128, 32), alpha=1",
+    "val_AP": 0.9523652853887868,
+    "val_AUC": 0.7324797843665768,
+    "fit_s": 4.17
+  }
+]

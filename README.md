@@ -4,7 +4,27 @@ MMA3001 (Numerical Methods and Machine Learning) individual project.
 
 A computer-vision pipeline that looks at a camera frame of a packaged pork-rasher tray on a conveyor and finds packaging and product-placement defects. The aim is to support automated quality inspection, so that faulty trays can be pulled before distribution without relying on manual inspection.
 
-> **Status: v0.1, data audit and preparation.** Training, the baseline comparison and evaluation are still to come.
+> **Status: v0.2.** Data audit, YOLOv8n training, evaluation and the baseline comparison are done. Sensitivity runs (image size, model size, brightness) are in progress.
+
+## Results so far (official test split: 80 images, 68 with a defect, 12 without)
+
+The threshold is chosen on validation (the highest one that still catches at least 95% of defect frames) and applied once to test. Brackets show bootstrap 95% intervals.
+
+| | YOLOv8n, 640 px | Baseline: HOG + RBF SVM |
+|---|---|---|
+| Frame-level ROC AUC | **0.92** | 0.74 |
+| Defect frames caught | **64/68 (94%)** [88–99%] | 54/68 (79%) [70–88%] |
+| Defect-free frames flagged | 3/12 [0–50%] | 5/12 |
+| CPU time per image (1 thread, end to end) | 92 ms | 14 ms |
+
+- **AUC difference** (YOLO − baseline): +0.18 [0.06, 0.31], paired bootstrap.
+- **YOLO test mAP50 per class:**
+  - unsealed 0.84;
+  - packaging-error 0.53;
+  - loose-meat 0.67 and twisted-meat 0.06, each from only 3–4 test boxes.
+- **Model size and speed:** 3.1 M parameters, 8.75 GFLOPs, about 5 ms inference per image on a T4 GPU.
+
+Details are in `results/yolov8n_640/`, `results/baseline/` and `results/comparison/`.
 
 ## Problem, inputs and outputs
 
@@ -76,7 +96,22 @@ python scripts/train_yolo.py --data data/processed/data.yaml --model yolov8n.pt 
     --epochs 60 --imgsz 640 --batch 16 --device 0 --out runs --name yolov8n_640
 ```
 
-Outputs go to `runs/<name>/`: best weights, the training log, `metrics.json` (validation and test mAP, model size, GFLOPs, timings), and every prediction at confidence ≥ 0.001 on the validation and test images (`predictions_*.json`). Thresholds can then be analysed without re-running the model.
+[`notebooks/02_sensitivity_runs.ipynb`](notebooks/02_sensitivity_runs.ipynb) trains three variants with identical settings: YOLOv8n at 320 px and 480 px, and YOLOv8s at 640 px.
+
+### Analysis (CPU)
+
+```bash
+# Frame-level threshold sweep, bootstrap intervals and per-class box recall for one run
+python scripts/analyse_run.py --run runs/yolov8n_640 --data data/processed
+
+# Baseline: hand-crafted features + decision tree / SVM / MLP, chosen by validation AUC
+python scripts/baseline.py --data data/processed --out results/baseline
+
+# YOLO vs baseline on the same frames, with CPU timing
+python scripts/compare.py --run runs/yolov8n_640 --data data/processed --baseline results/baseline
+```
+
+Training outputs go to `runs/<name>/`: best weights, the training log, `metrics.json` (validation and test mAP, model size, GFLOPs, timings), and every prediction at confidence ≥ 0.001 on the validation and test images (`predictions_*.json`). Thresholds can then be analysed without re-running the model.
 
 ## Repository layout
 
@@ -85,8 +120,10 @@ src/porkinspect/    package code
   labels.py         read and validate YOLO label files, parse Roboflow file names
   index.py          group files into distinct images; leakage and label-conflict checks
   export.py         write the dataset with dropped classes removed
-scripts/            command-line entry points (prepare_data.py, train_yolo.py)
-notebooks/          Colab notebooks (01_train_yolo.ipynb)
+  evaluate.py       IoU matching, frame-level metrics, threshold sweep, bootstrap intervals
+  features.py       hand-crafted colour/shape and HOG features for the baseline
+scripts/            prepare_data, train_yolo, analyse_run, baseline, compare
+notebooks/          Colab notebooks: 01 training, 02 sensitivity runs
 tests/              pytest tests
 results/            small result files (JSON, figures) that are committed
 data/               raw and processed data (ignored by git)
