@@ -58,4 +58,35 @@ The brief requires disclosure of all material AI use. This file is a running log
 - **The first model-selection metric was misleading.** Average precision was used first, but 88% of frames contain a defect, so random scores already get about 0.88 AP. Switched to ROC AUC, where random is 0.5, and reran.
 - **No cherry-picking.** On test, the colour/shape SVM scored higher (AUC 0.87) than the configuration chosen on validation (HOG SVM, test AUC 0.74). The validation choice is reported anyway, because choosing by test score would bias the comparison.
 
+**Notebook 02 hid the training log**
+- AI ran training with `subprocess.run`, so Colab didn't show the child process's output. The cell looked stuck while it was actually training.
+- I noticed and asked. The fix streams the output line by line.
+
+**Input-validation bug found by testing the command-line tool**
+- A corrupt file crashed the tool with `ModuleNotFoundError` instead of a clear error. Ultralytics replaces `PIL.Image.open` when it is imported, and its fallback raises a different exception.
+- The fix catches it. A regression test now checks this with Ultralytics imported.
+- The brightness limit was first set too narrow: it flagged a real test image the model handled correctly. It is now set from the measured training range (17-109).
+
+## Sensitivity runs (image size, model size)
+
+**AI's prediction was not supported**
+- AI predicted that 320 px images would lose the small packaging-error creases.
+- Test box recall for packaging-error was 14/23 at 320 px vs 15/23 at 640 px: no detectable loss.
+
+**A misleading plot, caught before use**
+- The first accuracy-vs-cost plot had a y-axis spanning only 0.888-0.915 and no error bars. That made differences of about 0.01 look large.
+- Redrawn on a 0.6-1.0 axis with 95% bootstrap and Wilson intervals. These show all four runs overlap.
+
+**Overall test mAP50 needed care**
+- The overall figure (0.36-0.58 across runs) moves mainly because of loose-meat and twisted-meat, with 3-4 test boxes each. It is not used to rank the models.
+
+**My decision on the final model**
+- AI laid out two options:
+  - (A) YOLOv8n at 320 px, chosen on validation with the Week 5 "equally good, so pick the simplest" rule;
+  - (B) YOLOv8n at 640 px.
+- I asked what would be best for a real packing plant, and chose **B** on engineering grounds:
+  - a missed defect costs far more than a false alarm;
+  - speed is not a constraint at real line speeds of 90-200 packs/min.
+- I had already seen the test results when choosing, and the report says so. The difference from 320 px is not significant (p = 0.25).
+
 *(To complete: my own reflection on how AI use affected my understanding and workflow.)*

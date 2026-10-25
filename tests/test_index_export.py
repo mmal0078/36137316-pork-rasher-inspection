@@ -36,10 +36,11 @@ def make_export(root: Path, files: dict[str, list[tuple[str, int, float, str]]])
 BOX = "3 0.5 0.5 0.2 0.2\n"
 
 
-def test_exposure_copies_match_and_different_images_do_not():
-    a, b = pattern(1).resize((180, 135)), pattern(1, 0.8).resize((180, 135))
-    a.save("/tmp/_a.png"), b.save("/tmp/_b.png"), pattern(2).save("/tmp/_c.png")
-    va, vb, vc = (thumbnail_vector(f"/tmp/_{k}.png") for k in "abc")
+def test_exposure_copies_match_and_different_images_do_not(tmp_path):
+    pattern(1).save(tmp_path / "a.png")
+    pattern(1, 0.8).save(tmp_path / "b.png")  # same image, 20% darker
+    pattern(2).save(tmp_path / "c.png")  # a different image
+    va, vb, vc = (thumbnail_vector(tmp_path / f"{k}.png") for k in "abc")
     assert cluster_by_content([va, vb, vc]) == [[0, 1], [2]]
 
 
