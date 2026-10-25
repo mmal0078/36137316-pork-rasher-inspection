@@ -123,6 +123,7 @@ def colour_shape_features(path: str | Path) -> np.ndarray:
     edges = np.hypot(gx, gy) > 0.08
 
     def frac(m, region):
+        """Share of ``region`` pixels that are also set in mask ``m`` (0 if the region is empty)."""
         n = region.sum()
         return float((m & region).sum() / n) if n else 0.0
 

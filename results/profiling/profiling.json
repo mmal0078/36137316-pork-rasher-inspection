@@ -1,0 +1,34 @@
+{
+  "images_profiled": 30,
+  "torch_threads": 1,
+  "cpu_wall_ms_per_image_cold_files_first_pass": 138.2,
+  "cpu_wall_ms_per_image_warm_with_profiler": 104.4,
+  "cpu_stage_ms_per_image": {
+    "preprocess": 2.58,
+    "inference": 82.0,
+    "postprocess": 0.93
+  },
+  "share_of_profiled_time_percent": {
+    "check_image (our input validation)": 4.0,
+    "Ultralytics preprocess": 4.2,
+    "network forward pass": 89.2,
+    "Ultralytics postprocess (NMS)": 1.0
+  },
+  "GFLOPs_per_image": 8.753,
+  "bytes": {
+    "weights": 12554928,
+    "input": 4915200,
+    "activations_once": 183820800,
+    "modelled_traffic": 385111728
+  },
+  "arithmetic_intensity_flop_per_byte": 22.7,
+  "t4_ridge_point_flop_per_byte": 25.3,
+  "bound_on_t4": "memory-bound",
+  "achieved_GFLOPs_per_s": {
+    "cpu_inference": 106.7,
+    "t4_inference_batch16": 1858.8
+  },
+  "note": "T4 time is Ultralytics validation inference per image at batch 16 (FP32); CPU time is batch 1, 1 thread",
+  "t4_fraction_of_fp32_peak_batch16": 0.229,
+  "roofline_t4_attainable_GFLOPs_per_s": 7273.0
+}

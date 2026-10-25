@@ -41,10 +41,12 @@ def analyse_split(preds, gts, thr):
     c = frame_counts(flags, defect)
 
     def rec(idx):
+        """Defect-frame recall for a resample of image indices."""
         d = defect[idx]
         return (flags[idx] & d).sum() / d.sum() if d.sum() else np.nan
 
     def far(idx):
+        """False-alarm rate for a resample of image indices."""
         n = ~defect[idx]
         return (flags[idx] & n).sum() / n.sum() if n.sum() else np.nan
 

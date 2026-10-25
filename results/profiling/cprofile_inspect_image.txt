@@ -1,0 +1,33 @@
+         84713 function calls (71274 primitive calls) in 3.130 seconds
+
+   Ordered by: cumulative time
+   List reduced from 301 to 25 due to restriction <25>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       60    0.002    0.000    6.085    0.101 /usr/local/lib/python3.13/site-packages/torch/autograd/grad_mode.py:294(__exit__)
+       60    0.000    0.000    2.965    0.049 {method 'send' of 'generator' objects}
+       60    0.003    0.000    2.964    0.049 /usr/local/lib/python3.13/site-packages/ultralytics/engine/predictor.py:320(stream_inference)
+       30    0.001    0.000    2.792    0.093 /usr/local/lib/python3.13/site-packages/ultralytics/engine/predictor.py:208(inference)
+  6480/30    0.020    0.000    2.792    0.093 /usr/local/lib/python3.13/site-packages/torch/nn/modules/module.py:1779(_wrapped_call_impl)
+  6480/30    0.032    0.000    2.791    0.093 /usr/local/lib/python3.13/site-packages/torch/nn/modules/module.py:1787(_call_impl)
+       30    0.001    0.000    2.791    0.093 /usr/local/lib/python3.13/site-packages/ultralytics/nn/autobackend.py:302(forward)
+       30    0.000    0.000    2.789    0.093 /usr/local/lib/python3.13/site-packages/ultralytics/nn/backends/pytorch.py:80(forward)
+       30    0.000    0.000    2.788    0.093 /usr/local/lib/python3.13/site-packages/ultralytics/nn/tasks.py:146(forward)
+       30    0.000    0.000    2.788    0.093 /usr/local/lib/python3.13/site-packages/ultralytics/nn/tasks.py:164(predict)
+       30    0.008    0.000    2.788    0.093 /usr/local/lib/python3.13/site-packages/ultralytics/nn/tasks.py:181(_predict_once)
+     1710    0.010    0.000    2.418    0.001 /usr/local/lib/python3.13/site-packages/ultralytics/nn/modules/conv.py:89(forward_fuse)
+     1920    0.005    0.000    2.177    0.001 /usr/local/lib/python3.13/site-packages/torch/nn/modules/conv.py:564(forward)
+     1920    0.006    0.000    2.167    0.001 /usr/local/lib/python3.13/site-packages/torch/nn/modules/conv.py:546(_conv_forward)
+     1920    2.162    0.001    2.162    0.001 {built-in method torch.conv2d}
+      240    0.007    0.000    1.310    0.005 /usr/local/lib/python3.13/site-packages/ultralytics/nn/modules/block.py:311(forward)
+       30    0.001    0.000    0.933    0.031 /usr/local/lib/python3.13/site-packages/ultralytics/nn/modules/head.py:180(forward)
+       30    0.003    0.000    0.875    0.029 /usr/local/lib/python3.13/site-packages/ultralytics/nn/modules/head.py:169(forward_head)
+      180    0.003    0.000    0.840    0.005 /usr/local/lib/python3.13/site-packages/torch/nn/modules/container.py:254(forward)
+      300    0.002    0.000    0.726    0.002 {method 'extend' of 'list' objects}
+      540    0.001    0.000    0.699    0.001 /usr/local/lib/python3.13/site-packages/ultralytics/nn/modules/block.py:314(<genexpr>)
+      300    0.021    0.000    0.695    0.002 /usr/local/lib/python3.13/site-packages/ultralytics/nn/modules/block.py:480(forward)
+     1710    0.004    0.000    0.258    0.000 /usr/local/lib/python3.13/site-packages/torch/nn/modules/activation.py:472(forward)
+     1710    0.004    0.000    0.255    0.000 /usr/local/lib/python3.13/site-packages/torch/nn/functional.py:2429(silu)
+     1710    0.248    0.000    0.248    0.000 {built-in method torch._C._nn.silu_}
+
+

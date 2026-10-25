@@ -89,4 +89,15 @@ The brief requires disclosure of all material AI use. This file is a running log
   - speed is not a constraint at real line speeds of 90-200 packs/min.
 - I had already seen the test results when choosing, and the report says so. The difference from 320 px is not significant (p = 0.25).
 
+## Final checks: profiling, arithmetic intensity, reproducibility
+
+**What AI did**
+- Added `profile_pipeline.py` (cProfile, arithmetic intensity, roofline), `build_docs.py` and the trained weights with an AGPL-3.0 note.
+- Recorded the exact library versions and added the executed notebooks.
+
+**AI errors caught**
+- **First profiling read:** AI's first reading blamed our input check (35% of the time) on Ultralytics' patched `Image.open`. Timing it directly showed 3 ms per image either way. The cost was the files being read from disk for the first time. The profile now excludes the cold disk pass, which is reported separately.
+- **Mislabelled GPU time:** AI had been quoting "about 5 ms per image on the T4" without saying this came from batch-16 validation. One frame at a time it is 10-15 ms end to end. The README and profiling output now label both.
+- **Licence:** AI had not mentioned that Ultralytics and the fine-tuned weights are AGPL-3.0, not MIT, until the final audit.
+
 *(To complete: my own reflection on how AI use affected my understanding and workflow.)*
