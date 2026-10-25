@@ -34,19 +34,43 @@ NAMES = ["loose-meat", "packaging-error", "twisted-meat", "unsealed"]
 
 
 def analyse_split(preds, gts, thr):
-    """Frame counts, bootstrap CIs and per-class box recall at threshold ``thr``."""
+    """Frame counts, bootstrap CIs and per-class box recall at threshold ``thr``.
+
+    Args:
+        preds: Image name -> detections, from ``load_predictions``.
+        gts: Image name -> labelled boxes, from ``load_ground_truth``.
+        thr: Frame-flag confidence threshold.
+
+    Returns:
+        Dict of frame counts, recall and false-alarm rate with 95% bootstrap
+        intervals, and per-class box recall (class-aware and any-class).
+    """
     images = sorted(gts)
     defect = np.array([len(gts[i]) > 0 for i in images])
     flags = frame_flags(preds, images, thr)
     c = frame_counts(flags, defect)
 
     def rec(idx):
-        """Defect-frame recall for a resample of image indices."""
+        """Defect-frame recall for a resample of image indices.
+
+        Args:
+            idx: Image indices (with repeats) from the bootstrap.
+
+        Returns:
+            Recall, or NaN if the resample has no defect frames.
+        """
         d = defect[idx]
         return (flags[idx] & d).sum() / d.sum() if d.sum() else np.nan
 
     def far(idx):
-        """False-alarm rate for a resample of image indices."""
+        """False-alarm rate for a resample of image indices.
+
+        Args:
+            idx: Image indices (with repeats) from the bootstrap.
+
+        Returns:
+            False-alarm rate, or NaN if the resample has no defect-free frames.
+        """
         n = ~defect[idx]
         return (flags[idx] & n).sum() / n.sum() if n.sum() else np.nan
 

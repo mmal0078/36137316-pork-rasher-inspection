@@ -36,7 +36,15 @@ from porkinspect.features import hog_features  # noqa: E402
 
 
 def yolo_frame_scores(pred_json: Path, names: np.ndarray) -> np.ndarray:
-    """Highest detection confidence per image (0 if no detection), in ``names`` order."""
+    """Frame-level defect score from the detector.
+
+    Args:
+        pred_json: Saved predictions file.
+        names: Image file names, in the wanted order.
+
+    Returns:
+        Highest detection confidence per image (0 if no detection).
+    """
     p = load_predictions(pred_json)
     return np.array([max((d.conf for d in p.get(str(n), [])), default=0.0) for n in names])
 

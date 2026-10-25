@@ -39,13 +39,25 @@ FACTORS = (0.4, 0.55, 0.7, 0.85, 1.0, 1.2, 1.4, 1.7, 2.0)
 
 
 def perturb(src: Path, dst: Path, factor: float) -> None:
-    """Write a copy of image ``src`` with every pixel multiplied by ``factor``."""
+    """Write a copy of an image with every pixel multiplied by ``factor``.
+
+    Args:
+        src: Input image.
+        dst: Output JPEG path.
+        factor: Brightness multiplier; results are clipped to 0-255.
+    """
     a = np.asarray(Image.open(src).convert("RGB"), dtype=float) * factor
     Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).save(dst, quality=95)
 
 
 def plot(rows: list[dict], threshold: float, path: Path) -> None:
-    """Plot mAP50 and frame catch rate against the brightness factor."""
+    """Plot mAP50 and frame catch rate against the brightness factor.
+
+    Args:
+        rows: One result dict per brightness factor.
+        threshold: Frame-flag threshold, shown in the legend.
+        path: Output PNG path.
+    """
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt

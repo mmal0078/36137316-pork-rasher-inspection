@@ -155,6 +155,14 @@ def draw_report(image: str | Path | Image.Image, report: dict, truth: list[tuple
         font = ImageFont.load_default()
 
     def rect(b):
+        """Convert a normalised (x_centre, y_centre, w, h) box to pixel corners.
+
+        Args:
+            b: Normalised box.
+
+        Returns:
+            ``[x0, y0, x1, y1]`` in pixels of the drawn image.
+        """
         x, y, bw, bh = b
         return [(x - bw / 2) * w, (y - bh / 2) * h, (x + bw / 2) * w, (y + bh / 2) * h]
 

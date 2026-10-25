@@ -51,6 +51,10 @@ T4_BANDWIDTH = 320e9
 def activation_bytes(torch_model, imgsz: int) -> tuple[int, int, int]:
     """Bytes of weights, input and all leaf-layer outputs for one float32 forward pass.
 
+    Args:
+        torch_model: The PyTorch module inside the Ultralytics model.
+        imgsz: Square input size in pixels.
+
     Returns:
         ``(weight_bytes, input_bytes, activation_bytes)``.
     """
@@ -59,6 +63,13 @@ def activation_bytes(torch_model, imgsz: int) -> tuple[int, int, int]:
     sizes = []
 
     def hook(_m, _inp, out):
+        """Forward hook: record the float32 size of each tensor a layer outputs.
+
+        Args:
+            _m: The layer (unused).
+            _inp: Its inputs (unused).
+            out: Its output tensor, or a list/tuple of them.
+        """
         for t in (out if isinstance(out, (list, tuple)) else [out]):
             if isinstance(t, torch.Tensor):
                 sizes.append(t.numel() * 4)
@@ -126,6 +137,15 @@ def main() -> None:
     total = sum(v[2] for v in stats.values())  # total own time
 
     def cum(pred):
+        """Total cumulative cProfile time of the functions selected by ``pred``.
+
+        Args:
+            pred: Function taking a cProfile key ``(file, line, name)`` and
+                returning True to include it.
+
+        Returns:
+            Seconds.
+        """
         return sum(v[3] for k, v in stats.items() if pred(k))
 
     parts = {

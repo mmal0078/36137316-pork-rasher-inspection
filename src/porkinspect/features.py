@@ -42,6 +42,13 @@ COLOUR_SHAPE_NAMES: tuple[str, ...] = (
 def load_rgb(path: str | Path, size: tuple[int, int] = WORK_SIZE) -> np.ndarray:
     """Load an image as a float RGB array in [0, 1], resized to ``size``.
 
+    Args:
+        path: Image file.
+        size: Output (width, height) in pixels.
+
+    Returns:
+        Array of shape (height, width, 3).
+
     Raises:
         OSError: If the file is not a readable image.
     """
@@ -54,13 +61,27 @@ def meat_mask(rgb: np.ndarray) -> np.ndarray:
     The rule (R > 0.43, R - G > 0.14, R - B > 0.10 on a 0-1 scale) was chosen
     by inspecting images. It separates pink/red meat from the dark grey belt
     and the clear tray. It is a heuristic, not a calibrated segmentation.
+
+    Args:
+        rgb: Float RGB array in [0, 1], shape (height, width, 3).
+
+    Returns:
+        Boolean array of shape (height, width), True on meat pixels.
     """
     r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
     return (r > 0.43) & (r - g > 0.14) & (r - b > 0.10)
 
 
 def _dilate(mask: np.ndarray, r: int) -> np.ndarray:
-    """Binary dilation by a (2r+1) square, using shifted copies (no SciPy needed)."""
+    """Binary dilation by a (2r+1) square, using shifted copies (no SciPy needed).
+
+    Args:
+        mask: Boolean image.
+        r: Dilation radius in pixels.
+
+    Returns:
+        Boolean image of the same shape, True within ``r`` pixels of ``mask``.
+    """
     out = mask.copy()
     h, w = mask.shape
     for dy in range(-r, r + 1):
@@ -72,7 +93,14 @@ def _dilate(mask: np.ndarray, r: int) -> np.ndarray:
 
 
 def _rgb_to_hsv(rgb: np.ndarray) -> np.ndarray:
-    """Vectorised RGB -> HSV, all channels in [0, 1]."""
+    """Vectorised RGB -> HSV conversion.
+
+    Args:
+        rgb: Float RGB array in [0, 1], shape (..., 3).
+
+    Returns:
+        Array of the same shape holding (hue, saturation, value), all in [0, 1].
+    """
     mx, mn = rgb.max(-1), rgb.min(-1)
     d = mx - mn
     h = np.zeros_like(mx)
@@ -96,8 +124,14 @@ def colour_shape_features(path: str | Path) -> np.ndarray:
     is (0.5, 0.5); this case does not occur in this dataset. Hue is shifted by
     half a turn so that red, which wraps around 0/1, averages correctly.
 
+    Args:
+        path: Image file, any resolution (resized to :data:`WORK_SIZE`).
+
     Returns:
-        A float array ordered as :data:`COLOUR_SHAPE_NAMES`.
+        A float array of length 20, ordered as :data:`COLOUR_SHAPE_NAMES`.
+
+    Raises:
+        OSError: If the file is not a readable image.
     """
     rgb = load_rgb(path)
     h, w = rgb.shape[:2]
@@ -123,7 +157,15 @@ def colour_shape_features(path: str | Path) -> np.ndarray:
     edges = np.hypot(gx, gy) > 0.08
 
     def frac(m, region):
-        """Share of ``region`` pixels that are also set in mask ``m`` (0 if the region is empty)."""
+        """Share of ``region`` pixels that are also set in mask ``m``.
+
+        Args:
+            m: Boolean mask.
+            region: Boolean mask of the same shape.
+
+        Returns:
+            Fraction in [0, 1]; 0 if the region is empty.
+        """
         n = region.sum()
         return float((m & region).sum() / n) if n else 0.0
 
@@ -139,6 +181,17 @@ def hog_features(path: str | Path, size: tuple[int, int] = (160, 120), cell: int
 
     With the defaults (160 x 120 px, 16 px cells, 2 x 2 cells per block,
     9 orientations), this gives 6 x 9 blocks x 36 = 1,944 numbers.
+
+    Args:
+        path: Image file, any resolution.
+        size: Thumbnail (width, height) in pixels.
+        cell: Cell side length in pixels.
+
+    Returns:
+        1-D float array of HOG features (length 1,944 with the defaults).
+
+    Raises:
+        OSError: If the file is not a readable image.
     """
     from skimage.feature import hog
 

@@ -42,6 +42,10 @@ def write_data_yaml(path: Path, names: list[str]) -> None:
     relative ``path`` against the current working directory, not the YAML
     file's folder. Re-run :func:`export_dataset` (or edit ``path``) if the
     folder is moved.
+
+    Args:
+        path: Where to write the YAML, inside the exported dataset folder.
+        names: Class names, in class-id order.
     """
     path.write_text(
         f"path: {path.parent.resolve()}\n"

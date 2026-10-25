@@ -90,6 +90,12 @@ def thumbnail_vector(path: str | Path) -> np.ndarray:
     Normalising removes overall brightness and contrast, so exposure-augmented
     copies of one image give nearly identical vectors.
 
+    Args:
+        path: Image file.
+
+    Returns:
+        1-D float array of length ``THUMB_SIZE[0] * THUMB_SIZE[1]``.
+
     Raises:
         ValueError: If the image is a single flat colour (zero variance), since
             its correlation with anything is undefined.
@@ -102,7 +108,18 @@ def thumbnail_vector(path: str | Path) -> np.ndarray:
 
 
 def correlation(u: np.ndarray, v: np.ndarray) -> float:
-    """Pearson correlation of two vectors from :func:`thumbnail_vector`."""
+    """Pearson correlation of two vectors from :func:`thumbnail_vector`.
+
+    Because both vectors already have mean 0 and standard deviation 1, this
+    is just their dot product divided by their length.
+
+    Args:
+        u: First normalised vector.
+        v: Second normalised vector, same length.
+
+    Returns:
+        Correlation in [-1, 1]; above 0.9 is treated as the same image.
+    """
     return float(u @ v) / len(u)
 
 
@@ -170,6 +187,13 @@ def summarise(images: list[SourceImage]) -> dict:
 
     Box and image counts per class are per distinct image (one copy each), so
     augmentation does not inflate them.
+
+    Args:
+        images: Distinct source images from :func:`build_index`.
+
+    Returns:
+        JSON-serialisable dict of per-split file, image, box and class counts,
+        plus counts of shared file names and label conflicts.
     """
     stems = Counter(im.key.split("#")[0] for im in images)
     per_split: dict[str, dict] = {}

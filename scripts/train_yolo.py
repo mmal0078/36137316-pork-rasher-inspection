@@ -32,6 +32,13 @@ def dump_predictions(model, image_dir: Path, imgsz: int, out_json: Path, conf: f
     A very low confidence floor is used so that any threshold can be applied
     later without re-running the model.
 
+    Args:
+        model: Loaded Ultralytics YOLO model.
+        image_dir: Folder of images.
+        imgsz: Inference image size in pixels.
+        out_json: Where to write the predictions.
+        conf: Confidence floor for saved detections.
+
     Returns:
         Timing summary: number of images and mean wall-clock milliseconds per
         image for the whole predict call (pre-processing + inference + NMS).
@@ -55,7 +62,16 @@ def dump_predictions(model, image_dir: Path, imgsz: int, out_json: Path, conf: f
 
 
 def metrics_dict(m, names: dict) -> dict:
-    """Convert an Ultralytics validation result into plain numbers."""
+    """Convert an Ultralytics validation result into plain numbers.
+
+    Args:
+        m: Result object returned by ``model.val()``.
+        names: Class id -> class name.
+
+    Returns:
+        JSON-serialisable dict of overall and per-class precision, recall,
+        mAP50 and mAP50-95, plus Ultralytics' speed breakdown.
+    """
     per_class = {}
     for i, c in enumerate(m.box.ap_class_index.tolist()):
         p, r, ap50, ap = m.box.class_result(i)
