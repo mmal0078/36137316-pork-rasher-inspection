@@ -110,3 +110,5 @@ def test_export_keeps_split_and_drops_wrinkle(tmp_path):
     assert [b.cls for b in lab] == [3]
     y = (out / "data.yaml").read_text()
     assert "nc: 4" in y and "wrinkle" not in y and "val: valid/images" in y
+    # Absolute path: Ultralytics resolves relative paths from the working directory.
+    assert f"path: {out.resolve()}" in y

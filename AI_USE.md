@@ -33,4 +33,14 @@ The brief requires disclosure of all material AI use. This file is a running log
 - Looked at the sample images and figures.
 - Asked for evidence before accepting claims.
 
+## Session 1 (continued): training script and notebook
+
+**What AI did**
+- Wrote `scripts/train_yolo.py` and `notebooks/01_train_yolo.ipynb`.
+- Smoke-tested the script on CPU before handing it over: 1 epoch, 5% of the data, 160 px.
+
+**Bugs the smoke test caught (before I ran anything)**
+- The generated `data.yaml` used a relative `path: .`. Ultralytics resolves that from the working directory, so the images weren't found. The unit test had passed because it only checked the file's text. The fix writes an absolute path, and a test now checks for it.
+- `model.info()` returns nothing in Ultralytics 8.4, so the parameter and FLOPs count crashed. The fix computes them directly. The result, 8.75 GFLOPs at 640 px, matches the published YOLOv8n figure (8.7).
+
 *(To complete: my own reflection on how AI use affected my understanding and workflow.)*
